@@ -3,7 +3,7 @@
 var generateBtn = document.querySelector("#generate");
 
 function generatePassword() {
-  var userinput = window.prompt("How long do youi want your password?");
+  var userinput = window.prompt("How long do you want your password?");
 
   var passwordLegth = parseInt(userinput);
 
@@ -28,8 +28,42 @@ function generatePassword() {
   var userWantsUppercase = window.confirm(
     "Would you like to include Uppercase letters in your password?"
   );
-}
 
+  var numberList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  var symbolList = ["!", "@", "#", "$", "%", "^", "&", "*"];
+  var lowercaseList = [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+  ];
+
+  for (var i = 0; i < lowercaseList.length; i++) {
+    uppercaseList[i] = lowercaseList[i].toUpperCase();
+  }
+}
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
