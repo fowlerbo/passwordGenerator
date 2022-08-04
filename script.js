@@ -1,76 +1,104 @@
 // Assignment code here
-
 var generateBtn = document.querySelector("#generate");
-
-function generatePassword() {
-  var userinput = window.prompt("How long do you want your password?");
-
-  var passwordLegth = parseInt(userinput);
-
-  if (isNaN(passwordLegth)) {
-    window.alert("This is not a number ");
-    return;
-  }
-
-  if (passwordLegth < 8 || passwordLegth > 128) {
-    window.alert("Password Length must be between 8 and 128 characters");
-    return;
-  }
-  var userWantsNumbers = window.confirm(
-    "Would you like to include numbers in your password?"
-  );
-  var userWantsSymbols = window.confirm(
-    "Would you like to include symbols in your password?"
-  );
-  var userWantslowercase = window.confirm(
-    "Would you like to include lowercase letters in your password?"
-  );
-  var userWantsUppercase = window.confirm(
-    "Would you like to include Uppercase letters in your password?"
-  );
-
-  var numberList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-  var symbolList = ["!", "@", "#", "$", "%", "^", "&", "*"];
-  var lowercaseList = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-  ];
-
-  for (var i = 0; i < lowercaseList.length; i++) {
-    uppercaseList[i] = lowercaseList[i].toUpperCase();
-  }
-}
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-
-  passwordText.value = password;
-}
-
-// Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
+
+//prompts the user for the number of characters, and if the
+//user wants lowercase, uppercase, numbers, and special characters in their password.
+function getRequirements() {
+  var numberOfCharacters = prompt(
+    "Password must be between 8 and 128 characters long."
+  );
+  if (numberOfCharacters < 8 || numberOfCharacters > 128) {
+    alert(
+      "This is not a valid input. Please try again and input a number between 8 and 128."
+    );
+    return;
+  } else {
+    var promptArray = [
+      {
+        question: "Would you like like to include lowercase letters?",
+        string: "abcdefghijklmnopqrstuvwxyz",
+      },
+      {
+        question: "Would you like like to include uppercase characters",
+        string: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      },
+      {
+        question: "Would you like like to include numbers?",
+        string: "0123456789",
+      },
+      {
+        question: "Would you like like to include special characters",
+        string: " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~",
+      },
+    ];
+    var characterList = [];
+    var confirm = [];
+    var falseCount = 0;
+    for (var i = 0; i < promptArray.length; i++) {
+      confirm[i] = window.confirm(promptArray[i].question);
+      if (confirm[i]) {
+        characterList = characterList + promptArray[i].string;
+      } else {
+        falseCount += 1;
+      }
+    }
+    if (falseCount === 4) {
+      alert("Please choose at least one character type.");
+      getRequirements();
+    }
+    var requirementsArray = [numberOfCharacters, characterList, confirm];
+    return requirementsArray;
+  }
+}
+
+//randomly generates the password
+function generatePassword(array) {
+  var passwordArray = [];
+  var positionArray = [];
+  var string = array[1];
+  var number = array[0];
+  for (var i = 0; i < number; i++) {
+    var position = Math.floor(string.length * Math.random());
+    passwordArray[i] = string[position];
+    positionArray[i] = position;
+  }
+  var passwordString = passwordArray.join("");
+  return passwordString;
+}
+
+function validatePassword(string, array) {
+  //use regular expressions to validate password.
+  //pass in the answer choices by making the confirm variable an array.
+  //returns true or false depending on if the password is a valid password.
+  var regexArray = [
+    /[a-z]+/,
+    /[A-Z]+/,
+    /[0-9]+/,
+    /[ !\"#$%&'()*+,-./:;<=>?@\[\\\]^_`{|}~]/,
+  ];
+  for (i = 0; i < array.length; i++) {
+    if (array[i] === true) {
+      var validationCheck = regexArray[i].test(string);
+      if (validationCheck === false) {
+        console.log(string + " is an invalid password");
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+//Write password to the #password input
+function writePassword() {
+  var characterArray = getRequirements();
+  if (characterArray != "") {
+    var validPassword = "";
+    while (validPassword === false || validPassword === "") {
+      var password = generatePassword(characterArray);
+      validPassword = validatePassword(password, characterArray[2]);
+    }
+    var passwordText = document.querySelector("#password");
+    passwordText.textContent = password;
+  }
+}
