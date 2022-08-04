@@ -10,9 +10,24 @@ function generatePassword() {
   if (isNaN(passwordLegth)) {
     window.alert("This is not a number ");
     return;
-  } else {
-    window.alert("This is a valid number");
   }
+
+  if (passwordLegth < 8 || passwordLegth > 128) {
+    window.alert("Password Length must be between 8 and 128 characters");
+    return;
+  }
+  var userWantsNumbers = window.confirm(
+    "Would you like to include numbers in your password?"
+  );
+  var userWantsSymbols = window.confirm(
+    "Would you like to include symbols in your password?"
+  );
+  var userWantslowercase = window.confirm(
+    "Would you like to include lowercase letters in your password?"
+  );
+  var userWantsUppercase = window.confirm(
+    "Would you like to include Uppercase letters in your password?"
+  );
 }
 
 // Write password to the #password input
