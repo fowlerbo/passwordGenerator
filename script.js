@@ -9,9 +9,7 @@ function getRequirements() {
     "Password must be between 8 and 128 characters long."
   );
   if (numberOfCharacters < 8 || numberOfCharacters > 128) {
-    alert(
-      "This is not a valid input. Please try again and input a number between 8 and 128."
-    );
+    alert("Not a valid input. Input a number between 8 and 128.");
     return;
   } else {
     var promptArray = [
